@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--
+    Завдання 3: Робота з API (Fetch) та фільтрація Використовуючи API:
+    https://api.census.gov/data/2020/acs/acs5/profile?get=NAME&for=county:*
+    Напишіть асинхронну функцію для отримання даних.
+    Збережіть отримані дані у масив об'єктів.
+    Створіть функцію, яка приймає назву округу (наприклад, "Baldwin County, Alabama") і
+    повертає його код (комбінацію state + county).
+    Додайте на сторінку <input> та кнопку.
+    При натисканні на кнопку в консоль (або в окремий div) має виводитись код округу, введеного в поле.
+    -->
+    <input type="text" id="countyInput" placeholder="Baldwin County, Alabama">
+    <button id="searchBtn">Знайти код</button>
+    <div id="result" style="margin-top: 10px; font-weight: bold;"></div>
+    <script>
+        let countiesData = [];
+
+        async function fetchCounties() {
+            const url = 'https://api.census.gov/data/2020/acs/acs5/profile?get=NAME&for=county:*';
+
+            try {
+                const response = await fetch(url);
+                const rawData = await response.json();
+
+                countiesData = rawData.slice(1).map(item => ({
+                    name: item[0],
+                    state: item[1],
+                    county: item[2],
+                    fullCode: item[1] + item[2]
+                }));
+
+                console.log("Дані завантажено успішно");
+            } catch (error) {
+                console.error("Помилка завантаження:", error);
+            }
+        }
+
+        function getCountyCode(name) {
+            const found = countiesData.find(c => c.name.toLowerCase() === name.toLowerCase().trim());
+            return found ? found.fullCode : "Округ не знайдено";
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const inputValue = document.getElementById('countyInput').value;
+            const resultDiv = document.getElementById('result');
+
+            const code = getCountyCode(inputValue);
+            resultDiv.textContent = `Код: ${code}`;
+            console.log(`Результат для "${inputValue}":`, code);
+        });
+
+        fetchCounties();
+    </script>
+</body>
+</html>

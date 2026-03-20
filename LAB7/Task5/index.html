@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Анімація блоку</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      width: 100%;
+      /* Використовуємо vh (viewport height) замість пікселів */
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column; /* Щоб кнопки були над блоком */
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    .controls {
+      margin-bottom: 20px;
+    }
+
+    #elid {
+      /* Використовуємо vmin, щоб блок був пропорційним на будь-якому екрані */
+      width: 40vmin;
+      height: 40vmin;
+      border-radius: 10px;
+      background-color: aqua;
+      position: relative;
+      left: 0;
+      transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <!--Завдання 5: Анімація та взаємодія
+  Створіть елемент <div id="elid"></div> (задайте йому розміри та колір через CSS).
+  Створіть дві кнопки: "Вліво" та "Вправо".
+  Напишіть обробник подій, щоб при натисканні на кнопки елемент плавно
+  (використовуйте transition у CSS або animate() у JS) зміщувався на 100px у відповідну сторону.
+  -->
+  <div class="controls">
+    <button id="moveLeft">← Вліво</button>
+    <button id="moveRight">Вправо →</button>
+  </div>
+
+  <div id="elid"></div>
+
+  <script>
+    const element = document.getElementById('elid');
+    const btnLeft = document.getElementById('moveLeft');
+    const btnRight = document.getElementById('moveRight');
+
+    let currentOffset = 0;
+
+    btnLeft.addEventListener('click', () => {
+      currentOffset -= 100;
+      element.style.left = `${currentOffset}px`;
+    });
+
+    btnRight.addEventListener('click', () => {
+      currentOffset += 100;
+      element.style.left = `${currentOffset}px`;
+    });
+  </script>
+</body>
+</html>
