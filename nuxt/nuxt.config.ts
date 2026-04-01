@@ -2,8 +2,13 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@vueuse/nuxt',
   ],
+
+  colorMode: {
+      preference: 'light'
+    },
 
   devtools: {
     enabled: true
