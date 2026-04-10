@@ -29,5 +29,13 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
+  },
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+      ]
+    }
   }
 })

@@ -34,8 +34,8 @@
         </span>
       </div>
 
-      <div v-if="showButton" class="mb-8">
-        <button class="w-full bg-linear-to-r from-[#ffd813] to-[#ff8b0b] text-gray-900 py-3 font-bold text-[14px] rounded-md transition-colors duration-200 cursor-pointer">
+      <div @click="goToCheckout" v-if="showButton" class="mb-8">
+        <button class="w-full bg-linear-to-r from-[#ffd813] to-[#ff8b0b] hover:brightness-110 text-gray-900 py-3 font-bold text-[14px] rounded-md transition-all duration-200 cursor-pointer">
           Try It Free
         </button>
       </div>
@@ -70,4 +70,15 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   showButton: true
 })
+
+// Функція для переходу на сторінку чекауту
+const goToCheckout = () => {
+  navigateTo({
+    path: '/checkout',
+    query: {
+      planId: props.plan.id, // Передаємо ID тарифу
+      annual: props.isAnnual ? 'true' : 'false' // Передаємо тип оплати
+    }
+  })
+}
 </script>

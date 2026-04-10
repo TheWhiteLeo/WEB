@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>Список продуктів</Title>
+    <Title>Products List</Title>
   </Head>
 
   <div class="p-6 flex flex-col items-center">
