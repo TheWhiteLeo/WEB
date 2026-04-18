@@ -37,7 +37,6 @@
           <input type="text" placeholder="MM / YY" class="bg-transparent w-20 text-center outline-hidden text-sm" disabled>
           <input type="text" placeholder="CVC" class="bg-transparent w-16 text-center outline-hidden text-sm" disabled>
         </div>
-        <p class="text-xs text-gray-400 mt-1">Mockup UI. Requires payment provider integration.</p>
       </div>
 
       <div class="mb-6">
@@ -77,21 +76,21 @@
 
       <button
         type="submit"
-        :disabled="isSubmitting"
+        :disabled="subscriptionStore.isSubmitting"
         class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-md transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {{ isSubmitting ? 'Processing...' : 'Try It Free' }}
+        {{ subscriptionStore.isSubmitting ? 'Processing...' : 'Try It Free' }}
       </button>
 
-      <p v-if="successMessage" class="mt-4 text-green-600 font-medium text-sm">
-        {{ successMessage }}
+      <p v-if="subscriptionStore.successMessage" class="mt-4 text-green-600 font-medium text-sm">
+        {{ subscriptionStore.successMessage }}
       </p>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { reactive, computed } from 'vue'
 import type { PricingPlan } from '~/types/pricing'
 
 const props = defineProps<{
@@ -99,14 +98,13 @@ const props = defineProps<{
   isAnnual: boolean
 }>()
 
+const subscriptionStore = useSubscriptionStore()
+
 const form = reactive({
-  fullName: 'dev4 dev4',
+  fullName: '',
   address: '',
   consent: false
 })
-
-const isSubmitting = ref(false)
-const successMessage = ref('')
 
 const renewalDate = computed(() => {
   const date = new Date()
@@ -123,25 +121,9 @@ const renewalDate = computed(() => {
 const submitSubscription = async () => {
   if (!form.consent) return
 
-  isSubmitting.value = true
-  successMessage.value = ''
-
-  try {
-    const response = await $fetch('/api/subscription/create', {
-      method: 'POST',
-      body: {
-        ...form,
-        planId: props.plan.id,
-        isAnnual: props.isAnnual
-      }
-    })
-
-    successMessage.value = response.message
-  } catch (error) {
-    console.error('Submission failed:', error)
-    alert('Something went wrong. Please try again.')
-  } finally {
-    isSubmitting.value = false
-  }
+  await subscriptionStore.submitPayment({
+    fullName: form.fullName,
+    address: form.address
+  })
 }
 </script>

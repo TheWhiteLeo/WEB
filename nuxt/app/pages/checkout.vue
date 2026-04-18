@@ -47,10 +47,6 @@
 import { storeToRefs } from 'pinia'
 import { useSubscriptionStore } from '~/stores/useSubscriptionStore'
 
-useHead({
-  title: 'Checkout - Start Your 3-Day Free Trial'
-})
-
 const subscriptionStore = useSubscriptionStore()
 const { selectedPlan, isAnnual } = storeToRefs(subscriptionStore)
 
@@ -58,7 +54,4 @@ if (!selectedPlan.value) {
   const router = useRouter()
   router.push('/pricing-page')
 }
-useHead({
-  title: 'Checkout - Start Your 3-Day Free Trial'
-})
 </script>
