@@ -34,7 +34,7 @@
         </span>
       </div>
 
-      <div @click="goToCheckout" v-if="showButton" class="mb-8">
+      <div @click="handleSelectPlan" v-if="showButton" class="mb-8">
         <button class="w-full bg-linear-to-r from-[#ffd813] to-[#ff8b0b] hover:brightness-110 text-gray-900 py-3 font-bold text-[14px] rounded-md transition-all duration-200 cursor-pointer">
           Try It Free
         </button>
@@ -56,29 +56,22 @@
 </template>
 
 <script setup lang="ts">
-// Імпортуємо наш новий тип
 import type { PricingPlan } from '~/types/pricing'
+import { useSubscriptionStore } from '~/stores/useSubscriptionStore'
 
-// Описуємо інтерфейс для пропсів
-interface Props {
+const props = withDefaults(defineProps<{
   plan: PricingPlan
   isAnnual: boolean
-  showButton?: boolean // Знак питання означає, що цей пропс необов'язковий
-}
-
-// Використовуємо withDefaults, щоб задати значення за замовчуванням для showButton
-const props = withDefaults(defineProps<Props>(), {
+  showButton?: boolean
+}>(), {
   showButton: true
 })
 
-// Функція для переходу на сторінку чекауту
-const goToCheckout = () => {
-  navigateTo({
-    path: '/checkout',
-    query: {
-      planId: props.plan.id, // Передаємо ID тарифу
-      annual: props.isAnnual ? 'true' : 'false' // Передаємо тип оплати
-    }
-  })
+const subscriptionStore = useSubscriptionStore()
+const router = useRouter()
+
+const handleSelectPlan = () => {
+  subscriptionStore.setSubscription(props.plan, props.isAnnual)
+  router.push('/checkout')
 }
 </script>

@@ -4,7 +4,12 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@vueuse/nuxt',
+    '@pinia/nuxt',
   ],
+
+  pinia: {
+    storesDirs: ['./stores/**'],
+  },
 
   colorMode: {
       preference: 'light'

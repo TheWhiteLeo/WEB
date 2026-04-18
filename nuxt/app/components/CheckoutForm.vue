@@ -1,6 +1,5 @@
 <template>
   <div class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 md:p-8">
-
     <div class="mb-8">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Order Summary</h3>
       <div class="space-y-3 text-sm">
@@ -88,7 +87,6 @@
         {{ successMessage }}
       </p>
     </form>
-
   </div>
 </template>
 

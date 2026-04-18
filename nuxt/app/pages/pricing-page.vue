@@ -2,6 +2,7 @@
   <Head>
     <Title>Pricing List</Title>
   </Head>
+
   <div class="w-full max-w-6xl mx-auto mb-16 pt-8 flex flex-col items-center">
 
     <PricingCardHeader v-model:isAnnual="isAnnual" />

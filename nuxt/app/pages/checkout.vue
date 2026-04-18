@@ -5,11 +5,12 @@
     </Head>
 
     <header class="w-full bg-[#3f3f3f] py-4 flex justify-center shadow-md">
-      <h1 class="text-white font-semibold text-lg">Checkout</h1>
+      <h1 class="text-white font-semibold text-lg">
+        Checkout
+      </h1>
     </header>
 
     <div class="max-w-6xl mx-auto px-4 py-8">
-
       <div class="mb-8">
         <button @click="$router.back()" class="text-gray-500 hover:text-gray-800 flex items-center text-sm mb-6 transition-colors cursor-pointer">
           &lt;&lt; back
@@ -22,51 +23,42 @@
         </p>
       </div>
 
-      <div v-if="pending" class="flex justify-center py-12">
-        <div class="animate-pulse flex space-x-4">
-          <div class="h-12 w-12 bg-gray-200 rounded-full"></div>
-          <div class="space-y-3">
-            <div class="h-4 bg-gray-200 rounded w-48"></div>
-            <div class="h-4 bg-gray-200 rounded w-32"></div>
-          </div>
-        </div>
-      </div>
-
-      <div v-else-if="checkoutData?.plan" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
+      <div v-if="selectedPlan" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div class="lg:col-span-4">
           <PricingCardBody
-            :plan="checkoutData.plan"
-            :isAnnual="checkoutData.isAnnual"
+            :plan="selectedPlan"
+            :isAnnual="isAnnual"
             :show-button="false"
           />
         </div>
 
         <div class="lg:col-span-8">
           <CheckoutForm
-            :plan="checkoutData.plan"
-            :isAnnual="checkoutData.isAnnual"
+            :plan="selectedPlan"
+            :isAnnual="isAnnual"
           />
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Сторінка тепер максимально легка, жодної логіки форми!
+import { storeToRefs } from 'pinia'
+import { useSubscriptionStore } from '~/stores/useSubscriptionStore'
+
 useHead({
   title: 'Checkout - Start Your 3-Day Free Trial'
 })
 
-const route = useRoute()
+const subscriptionStore = useSubscriptionStore()
+const { selectedPlan, isAnnual } = storeToRefs(subscriptionStore)
 
-const { data: checkoutData, pending } = await useFetch('/api/checkout-data', {
-  lazy: true,
-  query: {
-    planId: route.query.planId,
-    annual: route.query.annual
-  }
+if (!selectedPlan.value) {
+  const router = useRouter()
+  router.push('/pricing-page')
+}
+useHead({
+  title: 'Checkout - Start Your 3-Day Free Trial'
 })
 </script>
